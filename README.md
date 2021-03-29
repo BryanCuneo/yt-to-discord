@@ -52,7 +52,7 @@ Press the 'Do It!' button. Within a few minutes, you should see a GET request to
 
 ![ngrok subscription confirmation request](https://i.imgur.com/q557OZf.png)
 
-### Step Five - Wating and Beyond
+### Step Five - Waiting and Beyond
 From here, you'll have to wait until there is activity on the channel you subscribed to. For testing purposes you can simply subscribe to your own personal YouTube channel and upload a short video. You can then edit the description repeatedly every time you wish to generate a new notification. Each notification should show up as a POST to /feed with a response code of 204.
 
 ![ngrok push notification received](https://i.imgur.com/YbsMY9f.png)
