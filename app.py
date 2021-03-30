@@ -20,8 +20,7 @@ import xmltodict
 import yaml
 
 from discord_webhook import DiscordWebhook
-from flask import Flask
-from flask import request
+from flask import Flask, request
 from xml.parsers.expat import ExpatError
 
 
@@ -50,19 +49,20 @@ def feed():
 
     try:
         # Parse the XML from the POST request into a dict.
-        feed_xml = xmltodict.parse(request.data)
+        xml_dict = xmltodict.parse(request.data)
 
         # Lazy verification - check if the POST request is from a channel ID that's been
         # set in config["channel_ids"].  Skip the check if that config option is empty.
-        channel_id = feed_xml["feed"]["entry"]["yt:channelId"]
+        channel_id = xml_dict["feed"]["entry"]["yt:channelId"]
         if config["channel_ids"] != [] and channel_id not in config["channel_ids"]:
             return "", 403
 
         # Parse out the video URL.
-        video_url = feed_xml["feed"]["entry"]["link"]["@href"]
+        video_url = xml_dict["feed"]["entry"]["link"]["@href"]
         print("New video URL: {}".format(video_url))
 
         # Send the message to the webhook URL.
+        # https://discord.com/developers/docs/resources/webhook
         message = config["message_prefix"] + "\n" + video_url
         webhook = DiscordWebhook(url=config["webhook_url"], content=message)
         response = webhook.execute()
