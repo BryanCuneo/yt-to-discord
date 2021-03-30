@@ -1,3 +1,5 @@
 webhook_url: YOUR WEBHOOK URL HERE
 
+channel_ids: []
+
 message_prefix: A new video has just gone live!

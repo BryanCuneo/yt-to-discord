@@ -23,6 +23,8 @@ pip install -r .\requirements.txt
 
 Click that and paste the resulting link here in `config.yaml`.
 
+`channel_ids[]`: A comma sparated list of channel IDs from which your server should accept notifications. If left as an empty list, `[]`, it will accept notifications from any channel.
+
 `message_prefix`: A string to be included in the message with the video URL.
 
 ### Step Three - Serve the Server

@@ -45,13 +45,20 @@ def feed():
 
     challenge = request.args.get("hub.challenge")
     if challenge:
-        # YT will send a challenge from time to time to confirm the server is alive
+        # YT will send a challenge from time to time to confirm the server is alive.
         return challenge
 
     try:
-        # Parse the XML from the POST request
+        # Parse the XML from the POST request into a dict.
         feed_xml = xmltodict.parse(request.data)
 
+        # Lazy verification - check if the POST request is from a channel ID that's been
+        # set in config["channel_ids"].  Skip the check if that config option is empty.
+        channel_id = feed_xml["feed"]["entry"]["yt:channelId"]
+        if config["channel_ids"] != [] and channel_id not in config["channel_ids"]:
+            return "", 403
+
+        # Parse out the video URL.
         video_url = feed_xml["feed"]["entry"]["link"]["@href"]
         print("New video URL: {}".format(video_url))
 
@@ -61,10 +68,10 @@ def feed():
         response = webhook.execute()
 
     except (ExpatError, LookupError):
-        # request.data contains malformed XML or no XML at all, return FORBIDDEN
+        # request.data contains malformed XML or no XML at all, return FORBIDDEN.
         return "", 403
 
-    # Everything is good, return NO CONTENT
+    # Everything is good, return NO CONTENT.
     return "", 204
 
 
